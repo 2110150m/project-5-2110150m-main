@@ -54,15 +54,15 @@ CHIP CPU {
 
     And(a=CIins, b=instruction[4], out=loadD );
 
-    DRegister(in= ALUout, load=loadD, out=Dout);
+    DRegister(in=ALUout, load=loadD, out=Dout);
 
-    ALU(x=Dout, y=AMout, zx=instruction[11], nx=instruction[10] , zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out= ALUout, zr=ZRout, ng=NGout);
+    ALU(x=Dout, y=AMout, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, zr=ZRout, ng=NGout);
     Or16(a=false, b=Aout, out[0..14]=addressM);
     Or16(a=false, b=ALUout, out=outM);
     And(a=CIins, b=instruction[3], out=writeM);
     
-     And(a=ZRout, b=instruction[1], out=jeq);
-    And(a=CIins, b=instruction[2], out=jlt);
+    And(a=ZRout, b=instruction[1], out=jeq);
+    And(a=NGout, b=instruction[2], out=jlt);
     Or(a=ZRout, b=NGout, out=zeroOrNeg);  // 0 yoki minus son
     Not(in=zeroOrNeg, out=positive);
     And(a=positive, b=instruction[0], out=jgt);
